@@ -35,28 +35,45 @@
 
 <!-- HEADER PRINCIPAL CON HORARIO DINÁMICO -->
 <header class="sticky top-0 z-40 backdrop-blur-md bg-neutral-950/90 border-b border-neutral-900 shadow-xl">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full flex items-center justify-center text-amber-400 text-xl border border-amber-400/30 bg-neutral-900 shadow-[0_0_10px_rgba(251,191,36,0.2)]">
-                <i class="ph-bold ph-hamburger"></i>
-            </div>
-            <div>
-                <h1 class="font-black text-xl tracking-tight text-amber-400 uppercase">DeliBurger</h1>
-                <!-- Estado del Local Condicionado -->
-                <div class="flex items-center gap-1.5" id="store-status-container">
-                    <!-- Cargado dinámicamente mediante JavaScript -->
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-amber-400 text-xl border border-amber-400/30 bg-neutral-900 shadow-[0_0_10px_rgba(251,191,36,0.2)]">
+                    <i class="ph-bold ph-hamburger"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-xl tracking-tight text-amber-400 uppercase">DeliBurger</h1>
+                    <!-- Estado del Local Condicionado -->
+                    <div class="flex items-center gap-1.5" id="store-status-container">
+                        <!-- Cargado dinámicamente mediante JavaScript -->
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- BOTÓN DE CARRITO INTERACTIVO -->
-        <button onclick="toggleCartModal()" class="flex items-center gap-2 px-4 py-2 bg-amber-400 hover:bg-amber-500 text-neutral-950 rounded-full font-black text-sm shadow-lg transition-transform active:scale-95">
-            <i class="ph-bold ph-shopping-cart text-lg"></i>
-            <span id="cart-badge" class="bg-rose-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">0</span>
-            <span id="cart-header-total" class="border-l border-neutral-950/20 pl-2">$0.00</span>
-        </button>
-    </div>
-</header>
+            <!-- CONTENEDOR DERECHO: REDES + CARRITO -->
+            <div class="flex items-center gap-2">
+                <!-- Botón Facebook -->
+                <a href="https://www.facebook.com/DeliBurguer" target="_blank" rel="noopener noreferrer" 
+                   class="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-blue-500 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-md group" 
+                   title="Síguenos en Facebook">
+                    <i class="ph-bold ph-facebook-logo text-lg group-hover:scale-110 transition-transform"></i>
+                </a>
+
+                <!-- Botón DiDi Food -->
+                <a href="https://www.didi-food.com/TU_ENLACE_AQUI" target="_blank" rel="noopener noreferrer" 
+                   class="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-amber-500 hover:bg-amber-500 hover:text-neutral-950 hover:border-amber-500 transition-all shadow-md group" 
+                   title="Pide por DiDi Food">
+                    <i class="ph-bold ph-moped text-lg group-hover:scale-110 transition-transform"></i>
+                </a>
+
+                <!-- BOTÓN DE CARRITO INTERACTIVO -->
+                <button onclick="toggleCartModal()" class="flex items-center gap-2 px-4 py-2 bg-amber-400 hover:bg-amber-500 text-neutral-950 rounded-full font-black text-sm">
+                    <i class="ph-bold ph-shopping-cart text-lg"></i>
+                    <span id="cart-badge" class="bg-rose-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">0</span>
+                    <span id="cart-header-total" class="border-l border-neutral-950/20 pl-2">$0.00</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
 <!-- AVISO CLIMÁTICO / ALERTA DE SERVICIO -->
 <div class="bg-amber-500/10 border-b border-amber-500/20 text-amber-300 text-[11px] py-1.5 px-4 text-center font-bold flex items-center justify-center gap-2">
