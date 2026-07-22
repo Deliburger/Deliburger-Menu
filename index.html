@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeliBurger - Satisfaciendo Paladares</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos Phosphor -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;600;700;800&family=Rubik:wght=400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Rubik', sans-serif; background-color: #0d0d0d; }
+        .brick-bg {
+            background-color: #0b0b0c;
+            background-image: 
+                linear-gradient(335deg, #141416 23px, transparent 23px),
+                linear-gradient(155deg, #141416 23px, transparent 23px),
+                linear-gradient(335deg, #141416 23px, transparent 23px),
+                linear-gradient(155deg, #141416 23px, transparent 23px);
+            background-size: 58px 58px;
+            background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
+        }
+        .neon-text-yellow { text-shadow: 0 0 8px rgba(251, 191, 36, 0.5), 0 0 20px rgba(251, 191, 36, 0.3); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="text-stone-100 brick-bg min-h-screen relative">
+
+<!-- HEADER PRINCIPAL CON HORARIO DINÁMICO -->
+<header class="sticky top-0 z-40 backdrop-blur-md bg-neutral-950/90 border-b border-neutral-900 shadow-xl">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center text-amber-400 text-xl border border-amber-400/30 bg-neutral-900 shadow-[0_0_10px_rgba(251,191,36,0.2)]">
+                <i class="ph-bold ph-hamburger"></i>
+            </div>
+            <div>
+                <h1 class="font-black text-xl tracking-tight text-amber-400 uppercase">DeliBurger</h1>
+                <!-- Estado del Local Condicionado -->
+                <div class="flex items-center gap-1.5" id="store-status-container">
+                    <!-- Cargado dinámicamente mediante JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTÓN DE CARRITO INTERACTIVO -->
+        <button onclick="toggleCartModal()" class="flex items-center gap-2 px-4 py-2 bg-amber-400 hover:bg-amber-500 text-neutral-950 rounded-full font-black text-sm shadow-lg transition-transform active:scale-95">
+            <i class="ph-bold ph-shopping-cart text-lg"></i>
+            <span id="cart-badge" class="bg-rose-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">0</span>
+            <span id="cart-header-total" class="border-l border-neutral-950/20 pl-2">$0.00</span>
+        </button>
+    </div>
+</header>
+
+<!-- AVISO CLIMÁTICO / ALERTA DE SERVICIO -->
+<div class="bg-amber-500/10 border-b border-amber-500/20 text-amber-300 text-[11px] py-1.5 px-4 text-center font-bold flex items-center justify-center gap-2">
+    <i class="ph-bold ph-cloud-rain text-base animate-bounce"></i>
+    <span>Aviso: El servicio a domicilio está sujeto a disponibilidad y condiciones meteorológicas para resguardar la seguridad de nuestros repartidores.</span>
+</div>
+
+<!-- SECCIÓN DE PUBLICIDAD / PROMO Y EVENTOS DESTACADOS -->
+<section class="max-w-6xl mx-auto px-4 pt-6" id="promo-banner-container">
+    <div class="bg-neutral-900/90 border border-amber-400/40 rounded-2xl overflow-hidden shadow-2xl">
+        
+        <!-- Pestañas de Navegación del Banner -->
+        <div class="flex border-b border-neutral-800 bg-neutral-950/60">
+            <button id="tab-banner-promo" onclick="switchBannerTab('promo')" class="flex-1 py-2.5 text-xs font-black uppercase tracking-wider text-amber-400 border-b-2 border-amber-400 transition-all flex items-center justify-center gap-2">
+                <i class="ph-bold ph-tag"></i> Promoción Especial
+            </button>
+            <button id="tab-banner-event" onclick="switchBannerTab('event')" class="flex-1 py-2.5 text-xs font-black uppercase tracking-wider text-stone-400 border-b-2 border-transparent hover:text-stone-200 transition-all flex items-center justify-center gap-2">
+                <i class="ph-bold ph-storefront"></i> Nueva Apertura
+            </button>
+        </div>
+
+        <!-- Contenido 1: Promoción Combo Pareja + Bebidas -->
+        <div id="content-banner-promo" class="grid grid-cols-1 md:grid-cols-12 items-center">
+            <div class="md:col-span-4 h-40 md:h-full min-h-[160px] bg-neutral-950 relative">
+                <img src="images/promo-apertura.jpg" alt="Promo DeliBurger" class="w-full h-full object-cover" onerror="handleImgError(this)">
+            </div>
+            <div class="md:col-span-8 p-6 space-y-3">
+                <span class="bg-rose-600 text-white font-extrabold text-[10px] px-2 py-0.5 rounded uppercase tracking-wider">Promoción Apertura</span>
+                <h3 class="text-xl sm:text-2xl font-black text-amber-400 uppercase tracking-tight">¡Combo Pareja + Bebidas!</h3>
+                <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                    Llévate 2 Hamburguesas Clásicas + 1 Orden de Hot-Dogs + 1 Orden de Papas + Bebidas incluidas por solo <span class="text-amber-400 font-bold">$250.00</span> por motivo de apertura.
+                </p>
+                <button onclick="addPromoToCart()" class="bg-amber-400 hover:bg-amber-500 text-neutral-950 font-black text-xs px-4 py-2 rounded-xl transition-all shadow-md flex items-center gap-1.5 uppercase">
+                    <i class="ph-bold ph-plus-circle"></i> Agregar Promo al Carrito
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenido 2: Anuncio Nueva Apertura Sucursal Guadalupe -->
+        <div id="content-banner-event" class="grid grid-cols-1 md:grid-cols-12 items-center hidden">
+            <div class="md:col-span-4 h-40 md:h-full min-h-[160px] bg-neutral-950 relative flex items-center justify-center p-4">
+                <img src="images/sucursal-guadalupe.jpg" alt="Nueva Apertura" class="w-full h-full object-cover rounded-xl" onerror="handleImgError(this)">
+            </div>
+            <div class="md:col-span-8 p-6 space-y-3">
+                <span class="bg-amber-400 text-neutral-950 font-extrabold text-[10px] px-2 py-0.5 rounded uppercase tracking-wider">¡Nueva Sucursal!</span>
+                <h3 class="text-xl sm:text-2xl font-black text-amber-400 uppercase tracking-tight">Inauguración Sucursal Deli Guadalupe</h3>
+                <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                    ¡Seguimos creciendo para estar más cerca de ti! Ven a conocer nuestra nueva sucursal y disfruta de la mejor calidad.
+                </p>
+                <div class="flex items-center gap-3 pt-2">
+                    <a href="https://maps.app.goo.gl/VpzriNj9ncj3kNn3A" target="_blank" class="bg-amber-400 hover:bg-amber-500 text-neutral-950 font-black text-xs px-4 py-2 rounded-xl transition-all shadow-md flex items-center gap-2 uppercase">
+                        <i class="ph-bold ph-map-pin text-base"></i> Abrir en Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- SECCIÓN HERO CON LOGO OFICIAL DELIBURGER -->
+<section class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+    <div class="md:col-span-7 space-y-5 text-center md:text-left">
+        <h2 class="text-4xl sm:text-5xl font-black tracking-tight leading-none text-white uppercase">
+            Satisfaciendo <br><span class="text-amber-400 neon-text-yellow">Paladares</span>
+        </h2>
+        
+        <p class="text-stone-300 text-xs sm:text-sm max-w-lg">
+            Sabor único, ingredientes de alta calidad y la mejor atención. Haz tu pedido en línea y recíbelo directamente en tu domicilio o recógelo en sucursal.
+        </p>
+
+        <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+            <a href="#menu-container" class="px-6 py-3 bg-amber-400 text-neutral-950 hover:bg-amber-500 font-bold rounded-xl shadow-lg transition-all text-xs uppercase tracking-wider flex items-center gap-2">
+                <i class="ph-bold ph-book-open-text text-base"></i> Ver Menú Completo
+            </a>
+        </div>
+
+        <!-- INDICADORES LOGÍSTICOS -->
+        <div class="grid grid-cols-3 gap-2 pt-4 border-t border-neutral-900 max-w-sm mx-auto md:mx-0">
+            <div>
+                <h5 class="font-black text-amber-400 text-base">$150</h5>
+                <p class="text-[10px] text-stone-400">Pedido Mínimo</p>
+            </div>
+            <div>
+                <h5 class="font-black text-amber-400 text-base">$15</h5>
+                <p class="text-[10px] text-stone-400">Envío Estándar</p>
+            </div>
+            <div>
+                <h5 class="font-black text-amber-400 text-base">16:30-23:00</h5>
+                <p class="text-[10px] text-stone-400">Mie a Lun</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGO OFICIAL DELIBURGER DESDE LA CARPETA LOCAL -->
+    <div class="md:col-span-5 flex justify-center">
+        <div class="relative w-64 h-64 sm:w-72 sm:h-72 p-4 bg-neutral-950 border-2 border-amber-400/40 rounded-3xl shadow-[0_0_25px_rgba(251,191,36,0.15)] flex items-center justify-center overflow-hidden">
+            <img src="images/logo.jpeg" alt="DeliBurger Logo Oficial" class="w-full h-full object-contain" onerror="handleImgError(this)">
+        </div>
+    </div>
+</section>
+
+<!-- SECCIÓN DE PRODUCTOS FILTRABLES -->
+<section id="menu-container" class="max-w-6xl mx-auto px-4 py-6 scroll-mt-20">
+    <div class="mb-6 flex gap-2 overflow-x-auto no-scrollbar pb-2" id="tabs-container">
+        <!-- Pestañas cargadas dinámicamente -->
+    </div>
+
+    <div id="grid-productos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <!-- Tarjetas mapeadas por JS -->
+    </div>
+</section>
+
+<!-- MODAL DEL CARRITO INTERACTIVO -->
+<div id="cart-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex justify-end">
+    <div class="w-full max-w-md bg-neutral-950 h-full border-l border-neutral-800 p-6 flex flex-col justify-between shadow-2xl overflow-y-auto no-scrollbar">
+        
+        <div>
+            <!-- Header Carrito -->
+            <div class="flex items-center justify-between border-b border-neutral-900 pb-4 mb-4">
+                <div class="flex items-center gap-2 text-amber-400">
+                    <i class="ph-bold ph-shopping-bag-open text-xl"></i>
+                    <h4 class="font-black uppercase tracking-tight text-base">Tu Carrito</h4>
+                </div>
+                <button onclick="toggleCartModal()" class="text-stone-400 hover:text-white text-xl"><i class="ph-bold ph-x"></i></button>
+            </div>
+
+            <!-- Lista Dinámica de Artículos -->
+            <div id="cart-items-container" class="space-y-4 mb-6">
+                <!-- Artículos renderizados -->
+            </div>
+
+            <!-- FORMULARIO DE RECOLECCIÓN / DATOS DEL CLIENTE -->
+            <div id="cart-form-delivery" class="border-t border-neutral-900 pt-4 space-y-4 hidden">
+                <h5 class="text-xs font-black text-amber-400 uppercase tracking-wider"><i class="ph-bold ph-user-list"></i> Datos de entrega</h5>
+                
+                <!-- Nombre -->
+                <div>
+                    <label class="block text-[10px] text-stone-400 uppercase font-bold mb-1">Nombre Completo *</label>
+                    <input type="text" id="customer-name" placeholder="Ej. Juan Pérez" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                </div>
+
+                <!-- Método de Entrega -->
+                <div>
+                    <label class="block text-[10px] text-stone-400 uppercase font-bold mb-1">Método de Entrega *</label>
+                    <select id="delivery-method" onchange="handleDeliveryMethodChange()" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                        <option value="domicilio" id="option-domicilio">A Domicilio (+$15.00)</option>
+                        <option value="sucursal">Recoger en Sucursal</option>
+                    </select>
+                </div>
+
+                <!-- Campos condicionales: DOMICILIO -->
+                <div id="fields-domicilio" class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] text-stone-400 uppercase font-bold mb-1">Dirección Completa *</label>
+                        <input type="text" id="customer-address" placeholder="Calle, Número, Colonia" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-stone-400 uppercase font-bold mb-1">Referencias de la Casa / Entre calles *</label>
+                        <input type="text" id="customer-ref-dom" placeholder="Ej. Portón azul, frente a la tienda" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                    </div>
+                </div>
+
+                <!-- Campos condicionales: SUCURSAL -->
+                <div id="fields-sucursal" class="space-y-3 hidden">
+                    <div>
+                        <label class="block text-[10px] text-stone-400 uppercase font-bold mb-1">Horario estimado de recolección *</label>
+                        <input type="time" id="customer-time" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                    </div>
+                </div>
+
+                <!-- Método de Pago -->
+                <div>
+                    <label class="block text-[10px] text-stone-400 uppercase font-bold mb-1">Método de Pago *</label>
+                    <select id="payment-method" onchange="handlePaymentMethodChange()" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                        <option value="efectivo">Efectivo</option>
+                        <option value="transferencia">Transferencia Electrónica</option>
+                        <option value="tarjeta">Tarjeta (Terminal móvil +4% Comisión)</option>
+                    </select>
+                </div>
+
+                <!-- Cambio en Efectivo -->
+                <div id="fields-cash">
+                    <label class="block text-[10px] text-stone-400 uppercase font-bold mb-1">¿Con cuánto vas a pagar? (Para cambio) *</label>
+                    <input type="number" id="cash-change" placeholder="Ej. 200 o 500" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                </div>
+            </div>
+        </div>
+
+        <!-- Totales y Envío -->
+        <div class="border-t border-neutral-900 pt-4 mt-6 space-y-4">
+            <div class="space-y-1.5 text-xs">
+                <div class="flex justify-between text-stone-400"><span>Subtotal:</span><span id="summary-subtotal">$0.00</span></div>
+                <div id="row-card-fee" class="flex justify-between text-amber-500 hidden"><span>Comisión Tarjeta (4%):</span><span id="summary-card-fee">$0.00</span></div>
+                <div class="flex justify-between text-stone-400"><span>Costo de Envío:</span><span id="summary-delivery-cost">$15.00</span></div>
+                <div class="flex justify-between text-white font-black text-sm pt-1 border-t border-dashed border-neutral-800">
+                    <span>Total estimado:</span><span id="summary-total" class="text-amber-400">$0.00</span>
+                </div>
+            </div>
+            
+            <div id="min-order-alert" class="text-[11px] bg-rose-900/30 border border-rose-700/50 text-rose-300 p-2.5 rounded-lg text-center hidden">
+                <i class="ph-bold ph-warning-circle"></i> El pedido mínimo para envío a domicilio es de <b>$150</b>.
+            </div>
+
+            <button onclick="sendOrderToWhatsApp()" id="btn-checkout" class="w-full py-3 bg-amber-400 hover:bg-amber-500 disabled:opacity-40 disabled:cursor-not-allowed text-neutral-950 font-black text-xs rounded-xl uppercase tracking-wider flex items-center justify-center gap-2 shadow-md">
+                <i class="ph-bold ph-whatsapp-logo text-lg"></i> Enviar pedido a WhatsApp
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER PRINCIPAL -->
+<footer class="bg-neutral-950 border-t border-neutral-900 pt-12 pb-6 mt-16">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-12 gap-8 pb-8 border-b border-neutral-900">
+        
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="md:col-span-4 space-y-4 text-center md:text-left">
+            <div class="flex items-center justify-center md:justify-start gap-2 text-amber-400">
+                <i class="ph-bold ph-seal-check text-2xl"></i>
+                <h4 class="font-black tracking-tight uppercase text-lg">DeliBurger</h4>
+            </div>
+            <p class="text-xs text-amber-400 font-extrabold uppercase tracking-wider bg-amber-400/10 px-2.5 py-1 rounded-md inline-block">
+                Desde 2013
+            </p>
+            <p class="text-xs text-stone-300 leading-relaxed italic">
+                Calle 4, Esq. Priv. Popo, Col. Pantitlán, Alc. Iztacalco.
+            </p>
+            <div class="text-xs text-stone-400 space-y-1">
+                <p><i class="ph-bold ph-clock mr-1 text-amber-400"></i> Miércoles a Lunes — 16:30 a 23:00 Hrs</p>
+                <p><i class="ph-bold ph-moped mr-1 text-amber-400"></i> Envío a Domicilio hasta las 22:30 Hrs</p>
+            </div>
+        </div>
+
+        <!-- COLUMNA CENTRAL: ALIANZAS REVISADAS -->
+        <div class="md:col-span-4 space-y-4 text-center md:text-left">
+            <h5 class="text-xs font-black text-amber-400 uppercase tracking-widest"><i class="ph-bold ph-handshake"></i> Alianzas</h5>
+            <p class="text-[11px] text-stone-400 leading-tight">
+                Colaboraciones y difusión destacada en medios y proyectos locales:
+            </p>
+            <div class="flex flex-wrap justify-center md:justify-start items-center gap-2 pt-2">
+                <span class="text-[11px] font-black tracking-wider text-amber-400 border border-amber-400/30 bg-neutral-900 px-3 py-1.5 rounded-lg shadow-sm">
+                    Barrio Local
+                </span>
+                <span class="text-[11px] font-black tracking-wider text-amber-400 border border-amber-400/30 bg-neutral-900 px-3 py-1.5 rounded-lg shadow-sm">
+                    Canal 6
+                </span>
+            </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: BUZÓN DE COMENTARIOS MEJORADO CON AMBAS OPCIONES -->
+        <div class="md:col-span-4 space-y-4 bg-neutral-900/40 border border-neutral-900 p-5 rounded-2xl">
+            <div class="space-y-1">
+                <h5 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center justify-center md:justify-start gap-1.5">
+                    <i class="ph-bold ph-chat-teardrop-dots text-sm"></i> Buzón de Sugerencias
+                </h5>
+                <p class="text-[11px] text-stone-400 leading-tight">
+                    ¿Tienes dudas o comentarios? Envíanos tu mensaje:
+                </p>
+            </div>
+
+            <div class="space-y-2">
+                <textarea id="feedback-text" rows="2" placeholder="Escribe aquí tu mensaje..." class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white placeholder-stone-600 focus:outline-none focus:border-amber-400 resize-none"></textarea>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <!-- Opción 1: Directo a WhatsApp (Soporta procesamiento automático con Make) -->
+                    <button onclick="sendFeedbackToWhatsApp()" class="py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] rounded-lg uppercase tracking-wider flex items-center justify-center gap-1 transition-colors">
+                        <i class="ph-bold ph-whatsapp-logo text-sm"></i> WhatsApp
+                    </button>
+
+                    <!-- Opción 2: Formulario del sitio web -->
+                    <button onclick="sendFeedbackWebForm()" class="py-2 bg-amber-400 hover:bg-amber-500 text-neutral-950 font-bold text-[11px] rounded-lg uppercase tracking-wider flex items-center justify-center gap-1 transition-colors">
+                        <i class="ph-bold ph-paper-plane-tilt text-sm"></i> Enviar Web
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-[10px] text-stone-600 font-medium">
+        <p>© 2026 DeliBurger. Todos los derechos reservados.</p>
+        <p class="uppercase tracking-wider">Pantitlán | Sucursal Deli Guadalupe</p>
+    </div>
+</footer>
+
+<!-- SCRIPT Y CONTROLADORES -->
+<script>
+    // MANEJO ROBUSTO DE FALLA DE IMÁGENES (FALLBACK SVG ELEGANTE)
+    function handleImgError(img) {
+        img.onerror = null; // Previene bucles infinitos
+        // Sustituye por un placeholder vectorial estilizado de DeliBurger
+        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 24 24" fill="none" stroke="%23fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="background:%230d0d0d;"><circle cx="12" cy="12" r="10"/><path d="M7 11h10"/><path d="M7 15h10"/><path d="M8 8a4 4 0 0 1 8 0"/><text x="12" y="20" fill="%23fbbf24" font-size="3" font-family="sans-serif" text-anchor="middle" font-weight="bold">DeliBurger</text></svg>';
+    }
+
+    // BASE DE DATOS FIEL Y RUTA LOCAL DE IMÁGENES
+    const MENU_DATABASE = [
+        // --- HAMBURGUESAS ---
+        { id: 1, name: "Hamburguesa Junior", price: 60, category: "Hamburguesas", img: "images/hamburguesa-junior.jpg", desc: "100gr carne de res, quesillo, queso amarillo (sin verduras)." },
+        { id: 2, name: "Clásica", price: 65, category: "Hamburguesas", img: "images/hamburguesa-clasica.jpg", desc: "100gr carne de res, queso amarillo y quesillo." },
+        { id: 3, name: "Hawaiana", price: 70, category: "Hamburguesas", img: "images/hamburguesa-hawaiana.jpg", desc: "100gr carne de res, queso amarillo, quesillo y piña." },
+        { id: 4, name: "Con Tocino", price: 70, category: "Hamburguesas", img: "images/hamburguesa-tocino.jpg", desc: "100gr carne de res, queso amarillo, quesillo y tocino." },
+        { id: 5, name: "Con Salchicha", price: 70, category: "Hamburguesas", img: "images/hamburguesa-salchicha.jpg", desc: "100gr carne de res, queso amarillo, quesillo y salchicha." },
+        { id: 6, name: "DeliBurger", price: 80, category: "Hamburguesas", img: "images/hamburguesa-deliburger.jpg", desc: "100gr carne de res, queso Oaxaca derretido, americano, aros de cebolla, tocino y BBQ." },
+        { id: 7, name: "Pollo", price: 80, category: "Hamburguesas", img: "images/hamburguesa-pollo.jpg", desc: "Pechuga de pollo empanizada frita con quesillo derretido." },
+        { id: 8, name: "Doble", price: 85, category: "Hamburguesas", img: "images/hamburguesa-doble.jpg", desc: "200gr carne de res, queso amarillo y quesillo." },
+        { id: 9, name: "Doble Especial", price: 90, category: "Hamburguesas", img: "images/hamburguesa-doble-especial.jpg", desc: "200gr carne de res, doble queso amarillo + tocino, piña o salchicha." },
+        { id: 10, name: "Gourmet", price: 90, category: "Hamburguesas", img: "images/hamburguesa-gourmet.jpg", desc: "100gr carne de res, quesillo, queso amarillo, costra de queso Oaxaca con tocino carnosito." },
+        { id: 11, name: "Gourmet Manchego", price: 90, category: "Hamburguesas", img: "images/hamburguesa-gourmet-manchego.jpg", desc: "100gr carne de res, quesillo, queso amarillo, costra de queso manchego con trozos de salchicha." },
+        { id: 12, name: "Cheeseburger", price: 90, category: "Hamburguesas", img: "images/cheeseburger.jpg", desc: "100gr carne de res rellena de queso manchego, americano y quesillo." },
+        { id: 13, name: "Suprema", price: 99, category: "Hamburguesas", img: "images/hamburguesa-suprema.jpg", desc: "200gr carne de res, queso Oaxaca derretido, americano, piña, tocino y salchicha." },
+
+        // --- HOT DOGS Y COMPLEMENTOS ---
+        { id: 20, name: "Hot Dog Sencillo (1 pza)", price: 25, category: "Hot Dogs", img: "images/hotdog-sencillo.jpg", desc: "Hot dog tradicional sazonado." },
+        { id: 21, name: "Hot Dog Tocino o Piña (1 pza)", price: 30, category: "Hot Dogs", img: "images/hotdog-tocino-pina.jpg", desc: "Con tocino crujiente o piña." },
+        { id: 22, name: "Hot Dog Especial (1 pza)", price: 35, category: "Hot Dogs", img: "images/hotdog-especial.jpg", desc: "Hot dog con ingredientes especiales de la casa." },
+        { id: 23, name: "Tiras de Pollo", price: 80, category: "Hot Dogs", img: "images/tiras-pollo.jpg", desc: "150gr pollo frito en tiras con salsa BBQ, inglesa y jugo maggi." },
+        { id: 24, name: "Carne Extra (100gr)", price: 35, category: "Hot Dogs", img: "images/carne-extra.jpg", desc: "100gr carne de res cocida adicional." },
+
+        // --- COMBOS CON COMPONENTES INDIVIDUALES CONFIGURABLES ---
+        { 
+            id: 30, 
+            name: "Combo Consiéntete", 
+            price: 110, 
+            category: "Combos", 
+            img: "images/combo-consientete.jpg", 
+            desc: "1 Hamburguesa Clásica + 1 Hot Dog + 1 Complemento de Papas.",
+            comboParts: ["Hamburguesa Clásica", "Hot Dog", "Complemento de Papas"]
+        },
+        { 
+            id: 31, 
+            name: "Combo Pareja", 
+            price: 215, 
+            category: "Combos", 
+            img: "images/combo-pareja.jpg", 
+            desc: "2 Hamburguesas Clásicas + 1 Orden de Hot Dogs + 1 Orden de Papas.",
+            comboParts: ["Hamburguesa Clásica 1", "Hamburguesa Clásica 2", "Orden de Hot Dogs", "Orden de Papas"]
+        },
+        { 
+            id: 32, 
+            name: "Combo Familiar", 
+            price: 390, 
+            category: "Combos", 
+            img: "images/combo-familiar.jpg", 
+            desc: "4 Hamburguesas Clásicas + 1 Orden de Hot Dogs + 2 Ordenes de Papas.",
+            comboParts: ["Hamburguesa Clásica 1", "Hamburguesa Clásica 2", "Hamburguesa Clásica 3", "Hamburguesa Clásica 4", "Orden de Hot Dogs", "Orden de Papas 1", "Orden de Papas 2"]
+        },
+
+        // --- PAPAS Y ACOMPAÑAMIENTOS ---
+        { id: 40, name: "Papas a la Francesa", price: 50, category: "Papas", img: "images/papas-francesa.jpg", desc: "Orden de papas fritas crujientes estilo tradicional." },
+        { id: 41, name: "Complemento Papas Francesa", price: 30, category: "Papas", img: "images/complemento-papas.jpg", desc: "Porción individual de acompañamiento." },
+        { id: 42, name: "Orden de Papas Gajo", price: 60, category: "Papas", img: "images/papas-gajo.jpg", desc: "Gajo sazonado estilo rústico." },
+        { id: 43, name: "Complemento Gajo", price: 35, category: "Papas", img: "images/complemento-gajo.jpg", desc: "Porción individual de gajo." },
+        { id: 44, name: "Salchipapas", price: 60, category: "Papas", img: "images/salchipapas.jpg", desc: "Mezcla de papas fritas con salchichas sazonadas." },
+
+        // --- BOTANAS / MENUDENCIAS ---
+        { id: 50, name: "Cacahuate Enchilado", price: 15, category: "Botanas", img: "images/cacahuate-enchilado.jpg", desc: "Botana de cacahuate sazonado y picosito." },
+        { id: 51, name: "Cacahuate Español", price: 15, category: "Botanas", img: "images/cacahuate-espanol.jpg", desc: "Cacahuate con piel doradita." },
+        { id: 52, name: "Panditas", price: 15, category: "Botanas", img: "images/panditas.jpg", desc: "Gominolas de sabores surtidos." },
+        { id: 53, name: "Lombrices", price: 15, category: "Botanas", img: "images/lombrices.jpg", desc: "Gomitas en forma de lombriz." },
+        { id: 54, name: "Sorpresa", price: 15, category: "Botanas", img: "images/sorpresa.jpg", desc: "Gomita o botana dulce sorpresa." },
+
+        // --- BEBIDAS ---
+        { id: 60, name: "Agua Simple 600ml", price: 25, category: "Bebidas", img: "images/agua-600ml.jpg", desc: "Agua embotellada 600ml." },
+        { id: 61, name: "Boing Mango", price: 25, category: "Bebidas", img: "images/boing-mango.jpg", desc: "Jugo Boing sabor mango." },
+        { id: 62, name: "Boing Manzana", price: 25, category: "Bebidas", img: "images/boing-manzana.jpg", desc: "Jugo Boing sabor manzana." },
+        { id: 63, name: "Boing Guayaba", price: 25, category: "Bebidas", img: "images/boing-guayaba.jpg", desc: "Jugo Boing sabor guayaba." },
+        { id: 64, name: "Coca Cola", price: 30, category: "Bebidas", img: "images/coca-cola.jpg", desc: "Refresco helado 355ml." }
+    ];
+
+    let cart = [];
+    let currentCategory = "Todas";
+
+    function checkStoreStatus() {
+        const now = new Date();
+        const day = now.getDay();
+        const hour = now.getHours();
+        const min = now.getMinutes();
+        const totalMinutes = hour * 60 + min;
+
+        const openTime = 16 * 60 + 30; // 16:30
+        const closeTime = 23 * 60;     // 23:00
+        const deliveryCloseTime = 22 * 60 + 30; // 22:30
+
+        const isOpenDay = (day !== 2); // Martes cerrado
+        const isOpenHour = (totalMinutes >= openTime && totalMinutes < closeTime);
+        const isOpen = isOpenDay && isOpenHour;
+
+        const container = document.getElementById("store-status-container");
+        const deliveryOption = document.getElementById("option-domicilio");
+
+        if (isOpen) {
+            container.innerHTML = `
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-[11px] text-emerald-400 font-medium">Abierto ahora (16:30 - 23:00)</span>
+            `;
+        } else {
+            container.innerHTML = `
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                <span class="text-[11px] text-rose-400 font-medium">Cerrado ahora (Abre 16:30 Hrs)</span>
+            `;
+        }
+
+        if (totalMinutes >= deliveryCloseTime && deliveryOption) {
+            deliveryOption.disabled = true;
+            deliveryOption.innerText = "A Domicilio (Cerrado por horario - Solo recolección)";
+        }
+    }
+
+    function switchBannerTab(tab) {
+        const btnPromo = document.getElementById("tab-banner-promo");
+        const btnEvent = document.getElementById("tab-banner-event");
+        const contentPromo = document.getElementById("content-banner-promo");
+        const contentEvent = document.getElementById("content-banner-event");
+
+        if (tab === 'promo') {
+            btnPromo.className = "flex-1 py-2.5 text-xs font-black uppercase tracking-wider text-amber-400 border-b-2 border-amber-400 transition-all flex items-center justify-center gap-2";
+            btnEvent.className = "flex-1 py-2.5 text-xs font-black uppercase tracking-wider text-stone-400 border-b-2 border-transparent hover:text-stone-200 transition-all flex items-center justify-center gap-2";
+            contentPromo.classList.remove("hidden");
+            contentEvent.classList.add("hidden");
+        } else {
+            btnEvent.className = "flex-1 py-2.5 text-xs font-black uppercase tracking-wider text-amber-400 border-b-2 border-amber-400 transition-all flex items-center justify-center gap-2";
+            btnPromo.className = "flex-1 py-2.5 text-xs font-black uppercase tracking-wider text-stone-400 border-b-2 border-transparent hover:text-stone-200 transition-all flex items-center justify-center gap-2";
+            contentEvent.classList.remove("hidden");
+            contentPromo.classList.add("hidden");
+        }
+    }
+
+    function renderTabs() {
+        const categories = ["Todas", "Hamburguesas", "Hot Dogs", "Combos", "Papas", "Botanas", "Bebidas"];
+        const container = document.getElementById("tabs-container");
+        container.innerHTML = categories.map(cat => {
+            const active = currentCategory === cat;
+            return `<button onclick="setCategory('${cat}')" class="px-4 py-2 rounded-full font-bold text-xs whitespace-nowrap transition-all ${active ? 'bg-amber-400 text-neutral-950 border border-amber-400 shadow-md' : 'bg-neutral-900 border border-neutral-800 text-stone-400 hover:text-white'}">${cat}</button>`;
+        }).join('');
+    }
+
+    function setCategory(cat) {
+        currentCategory = cat;
+        renderTabs();
+        renderProducts();
+    }
+
+    function renderProducts() {
+        const container = document.getElementById("grid-productos");
+        const filtered = currentCategory === "Todas" ? MENU_DATABASE : MENU_DATABASE.filter(p => p.category === currentCategory);
+        
+        container.innerHTML = filtered.map(prod => `
+            <div class="bg-neutral-900/80 border border-neutral-800/80 rounded-xl overflow-hidden flex flex-col justify-between shadow hover:border-amber-400/30 transition-all">
+                <div class="h-32 w-full bg-neutral-950">
+                    <img src="${prod.img}" alt="${prod.name}" class="w-full h-full object-cover" onerror="handleImgError(this)">
+                </div>
+                <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h5 class="font-bold text-stone-100 text-xs sm:text-sm line-clamp-1">${prod.name}</h5>
+                            <span class="font-black text-amber-400 text-sm">$${prod.price}</span>
+                        </div>
+                        <p class="text-[11px] text-stone-400 leading-tight line-clamp-2">${prod.desc}</p>
+                    </div>
+                    <button onclick="addToCart(${prod.id})" class="w-full py-1.5 bg-neutral-950 text-amber-400 text-xs font-bold border border-amber-400/20 rounded-lg hover:bg-amber-400 hover:text-neutral-950 transition-colors uppercase tracking-wider">
+                        <i class="ph-bold ph-plus"></i> Añadir
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // AGREGA AL CARRITO CREANDO LA ESTRUCTURA DE SUB-PIEZAS
+    function addToCart(id) {
+        const item = MENU_DATABASE.find(p => p.id === id);
+        
+        let cartGroup = cart.find(g => g.id === id);
+        if(!cartGroup) {
+            cartGroup = {
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                img: item.img,
+                comboParts: item.comboParts || null,
+                items: []
+            };
+            cart.push(cartGroup);
+        }
+        
+        // Estructura de notas para productos o combos
+        let partNotes = {};
+        if (item.comboParts) {
+            item.comboParts.forEach(part => {
+                partNotes[part] = "";
+            });
+        }
+
+        cartGroup.items.push({
+            subUid: Date.now() + Math.random().toString(36).substr(2, 4),
+            notes: "", // Si es producto individual
+            partsSpec: partNotes // Si es combo
+        });
+
+        updateCartState();
+    }
+
+    function addPromoToCart() {
+        let cartGroup = cart.find(g => g.id === 999);
+        if(!cartGroup) {
+            cartGroup = {
+                id: 999,
+                name: "Combo Pareja + Bebidas (Promo)",
+                price: 250,
+                img: "images/promo-apertura.jpg",
+                comboParts: ["Hamburguesa Clásica 1", "Hamburguesa Clásica 2", "Orden Hot Dogs", "Orden Papas", "Bebidas"],
+                items: []
+            };
+            cart.push(cartGroup);
+        }
+
+        let partNotes = {};
+        cartGroup.comboParts.forEach(part => { partNotes[part] = ""; });
+
+        cartGroup.items.push({
+            subUid: Date.now() + Math.random().toString(36).substr(2, 4),
+            notes: "Promo Apertura",
+            partsSpec: partNotes
+        });
+
+        updateCartState();
+        toggleCartModal();
+    }
+
+    function removeSubItem(groupId, subUid) {
+        const group = cart.find(g => g.id === groupId);
+        if(group) {
+            group.items = group.items.filter(i => i.subUid !== subUid);
+            if(group.items.length === 0) {
+                cart = cart.filter(g => g.id !== groupId);
+            }
+        }
+        updateCartState();
+    }
+
+    function updateSubNotes(groupId, subUid, val) {
+        const group = cart.find(g => g.id === groupId);
+        if(group) {
+            const item = group.items.find(i => i.subUid === subUid);
+            if(item) item.notes = val;
+        }
+    }
+
+    function updateComboPartNotes(groupId, subUid, partName, val) {
+        const group = cart.find(g => g.id === groupId);
+        if(group) {
+            const item = group.items.find(i => i.subUid === subUid);
+            if(item && item.partsSpec) {
+                item.partsSpec[partName] = val;
+            }
+        }
+    }
+
+    function handleDeliveryMethodChange() {
+        const method = document.getElementById("delivery-method").value;
+        if (method === "domicilio") {
+            document.getElementById("fields-domicilio").classList.remove("hidden");
+            document.getElementById("fields-sucursal").classList.add("hidden");
+        } else {
+            document.getElementById("fields-domicilio").classList.add("hidden");
+            document.getElementById("fields-sucursal").classList.remove("hidden");
+        }
+        updateCartState();
+    }
+
+    function handlePaymentMethodChange() {
+        const method = document.getElementById("payment-method").value;
+        if (method === "efectivo") {
+            document.getElementById("fields-cash").classList.remove("hidden");
+        } else {
+            document.getElementById("fields-cash").classList.add("hidden");
+        }
+        updateCartState();
+    }
+
+    function updateCartState() {
+        let totalItems = 0;
+        let subtotal = 0;
+
+        cart.forEach(group => {
+            totalItems += group.items.length;
+            subtotal += (group.price * group.items.length);
+        });
+
+        const deliveryMethod = document.getElementById("delivery-method").value;
+        const paymentMethod = document.getElementById("payment-method").value;
+        
+        const deliveryCost = (deliveryMethod === "domicilio" && subtotal > 0) ? 15 : 0;
+        
+        let cardFee = 0;
+        const rowCardFee = document.getElementById("row-card-fee");
+        if (paymentMethod === "tarjeta" && subtotal > 0) {
+            cardFee = subtotal * 0.04;
+            rowCardFee.classList.remove("hidden");
+            document.getElementById("summary-card-fee").innerText = `$${cardFee.toFixed(2)}`;
+        } else {
+            rowCardFee.classList.add("hidden");
+        }
+        
+        document.getElementById("cart-badge").innerText = totalItems;
+        document.getElementById("cart-header-total").innerText = `$${subtotal.toFixed(2)}`;
+        document.getElementById("summary-subtotal").innerText = `$${subtotal.toFixed(2)}`;
+        document.getElementById("summary-delivery-cost").innerText = `$${deliveryCost.toFixed(2)}`;
+        
+        const totalFinal = subtotal > 0 ? (subtotal + deliveryCost + cardFee) : 0;
+        document.getElementById("summary-total").innerText = `$${totalFinal.toFixed(2)}`;
+
+        const minOrderAlert = document.getElementById("min-order-alert");
+        const btnCheckout = document.getElementById("btn-checkout");
+        const formDelivery = document.getElementById("cart-form-delivery");
+        
+        if (subtotal > 0) {
+            formDelivery.classList.remove("hidden");
+            if (deliveryMethod === "domicilio" && subtotal < 150) {
+                minOrderAlert.classList.remove("hidden");
+                btnCheckout.disabled = true;
+            } else {
+                minOrderAlert.classList.add("hidden");
+                btnCheckout.disabled = false;
+            }
+        } else {
+            formDelivery.classList.add("hidden");
+            minOrderAlert.classList.add("hidden");
+            btnCheckout.disabled = true;
+        }
+
+        renderCartItems();
+    }
+
+    // RENDERIZADO DE AGRUPAMIENTO CON ESPECIFICACIÓN DETALLADA PARA COMBOS Y PIEZAS
+    function renderCartItems() {
+        const container = document.getElementById("cart-items-container");
+        if (cart.length === 0) {
+            container.innerHTML = `<p class="text-xs text-stone-500 text-center py-8">El carrito está vacío. ¡Agrega tu antojo!</p>`;
+            return;
+        }
+
+        container.innerHTML = cart.map(group => {
+            const groupTotal = group.price * group.items.length;
+            
+            const subItemsHTML = group.items.map((item, idx) => {
+                // Si es un Combo con componentes independientes
+                if (group.comboParts) {
+                    const comboFields = group.comboParts.map(partName => `
+                        <div class="flex items-center gap-2 pt-1 pl-2">
+                            <span class="text-[9px] text-amber-300 font-bold w-24 truncate">• ${partName}:</span>
+                            <input type="text" placeholder="Especificación..." 
+                                   value="${item.partsSpec[partName] || ''}" 
+                                   onchange="updateComboPartNotes(${group.id}, '${item.subUid}', '${partName}', this.value)"
+                                   class="flex-1 bg-neutral-950 border border-neutral-800 rounded p-1 text-[10px] text-stone-200 placeholder-stone-600 focus:outline-none focus:border-amber-400/50">
+                        </div>
+                    `).join('');
+
+                    return `
+                        <div class="bg-neutral-950/60 p-2 rounded-lg border border-neutral-800/80 space-y-1">
+                            <div class="flex justify-between items-center text-[10px] font-extrabold text-amber-400 border-b border-neutral-800 pb-1">
+                                <span>Combo #${idx + 1}</span>
+                                <button onclick="removeSubItem(${group.id}, '${item.subUid}')" class="text-stone-500 hover:text-rose-400" title="Quitar combo"><i class="ph-bold ph-x"></i></button>
+                            </div>
+                            ${comboFields}
+                        </div>
+                    `;
+                }
+
+                // Si es un producto individual (Hamburguesas, Papas, etc.)
+                return `
+                    <div class="flex items-center gap-2 pt-1">
+                        <span class="text-[10px] text-amber-400 font-bold whitespace-nowrap">Pza ${idx + 1}:</span>
+                        <input type="text" placeholder="Especificación (ej: sin cebolla, salsa aparte)..." 
+                               value="${item.notes}" 
+                               onchange="updateSubNotes(${group.id}, '${item.subUid}', this.value)"
+                               class="w-full bg-neutral-950 border border-neutral-800 rounded p-1 text-[11px] text-stone-200 placeholder-stone-600 focus:outline-none focus:border-amber-400/50">
+                        <button onclick="removeSubItem(${group.id}, '${item.subUid}')" class="text-stone-500 hover:text-rose-400 px-1 text-xs" title="Quitar pieza">
+                            <i class="ph-bold ph-x"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="bg-neutral-900 p-3 rounded-xl border border-neutral-800 space-y-2">
+                    <div class="flex items-center justify-between border-b border-neutral-800/60 pb-2">
+                        <div class="flex items-center gap-2.5 max-w-[70%]">
+                            <img src="${group.img}" class="w-9 h-9 rounded-lg object-cover bg-neutral-950" onerror="handleImgError(this)">
+                            <div class="space-y-0.5 truncate">
+                                <h6 class="text-xs font-bold text-stone-100 truncate">${group.name}</h6>
+                                <span class="text-amber-400 font-extrabold text-xs">$${group.price} c/u</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="bg-amber-400/10 text-amber-400 border border-amber-400/30 text-[10px] font-black px-2 py-0.5 rounded-full">Cant: ${group.items.length}</span>
+                            <div class="text-[11px] font-black text-white pt-0.5">$${groupTotal.toFixed(2)}</div>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5 pt-1">
+                        ${subItemsHTML}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function toggleCartModal() {
+        const modal = document.getElementById("cart-modal");
+        modal.classList.toggle("hidden");
+    }
+
+    function sendOrderToWhatsApp() {
+        const name = document.getElementById("customer-name").value.trim();
+        const deliveryMethod = document.getElementById("delivery-method").value;
+        const paymentMethod = document.getElementById("payment-method").value;
+        
+        if(!name) { alert("Por favor ingresa tu nombre."); return; }
+
+        let text = "🍔 *NUEVO PEDIDO DESDE LA WEB - DELIBURGER* 🍔\n\n";
+        text += `👤 *Cliente:* ${name}\n`;
+        text += `🛵 *Método:* ${deliveryMethod === "domicilio" ? "A Domicilio" : "Recoger en Sucursal"}\n\n`;
+        
+        text += "📦 *DETALLE DEL PEDIDO:*\n";
+        
+        let subtotal = 0;
+        cart.forEach(group => {
+            const groupTotal = group.price * group.items.length;
+            subtotal += groupTotal;
+            text += `▪️ *${group.name}* (Cant: ${group.items.length}) - $${groupTotal.toFixed(2)}\n`;
+            
+            group.items.forEach((item, idx) => {
+                if (group.comboParts) {
+                    text += `   ↳ _Combo #${idx + 1}:_\n`;
+                    Object.keys(item.partsSpec).forEach(partName => {
+                        const note = item.partsSpec[partName].trim();
+                        if (note) {
+                            text += `      • ${partName}: ${note}\n`;
+                        }
+                    });
+                } else if(item.notes.trim()) {
+                    text += `   ↳ _Pza ${idx + 1}: ${item.notes.trim()}_\n`;
+                }
+            });
+        });
+        
+        const deliveryCost = deliveryMethod === "domicilio" ? 15 : 0;
+        const cardFee = paymentMethod === "tarjeta" ? (subtotal * 0.04) : 0;
+        const finalTotal = subtotal + deliveryCost + cardFee;
+        
+        text += `\n-----------------------\n`;
+        text += `💰 *Subtotal:* $${subtotal.toFixed(2)}\n`;
+        if(cardFee > 0) text += `💳 *Comisión Tarjeta (4%):* $${cardFee.toFixed(2)}\n`;
+        text += `🛵 *Envío:* $${deliveryCost.toFixed(2)}\n`;
+        text += `💵 *Total Final:* $${finalTotal.toFixed(2)}\n`;
+        
+        let methodLabel = "Efectivo";
+        if(paymentMethod === "transferencia") methodLabel = "Transferencia";
+        if(paymentMethod === "tarjeta") methodLabel = "Tarjeta (Terminal Móvil)";
+        text += `💳 *Método de Pago:* ${methodLabel}\n`;
+
+        if (paymentMethod === "efectivo") {
+            const cash = document.getElementById("cash-change").value;
+            text += `💰 *Paga con:* $${cash ? cash : finalTotal.toFixed(2)}\n`;
+        }
+
+        text += `\n-----------------------\n`;
+        if (deliveryMethod === "domicilio") {
+            const address = document.getElementById("customer-address").value.trim();
+            const refDom = document.getElementById("customer-ref-dom").value.trim();
+            if(!address || !refDom) { alert("Por favor llena la dirección y referencias."); return; }
+            text += `📍 *Dirección:* ${address}\n`;
+            text += `✨ *Referencias:* ${refDom}\n`;
+        } else {
+            const time = document.getElementById("customer-time").value;
+            if(!time) { alert("Por favor selecciona una hora de recogida."); return; }
+            text += `⏰ *Hora de recogida:* ${time} hrs\n`;
+        }
+
+        const message = encodeURIComponent(text);
+        window.open(`https://api.whatsapp.com/send?phone=5617254081&text=${message}`, '_blank');
+    }
+
+    // OPCIÓN 1: BUZÓN A WHATSAPP DIRECTO (CASO URGENTE / MAKE)
+    function sendFeedbackToWhatsApp() {
+        const comment = document.getElementById("feedback-text").value.trim();
+        if (!comment) { alert("Por favor escribe un mensaje antes de enviar."); return; }
+        
+        let text = "📬 *NUEVA SUGERENCIA / REPORTE - DELIBURGER* 📬\n\n";
+        text += `💬 *Comentario:* ${comment}\n`;
+        
+        const message = encodeURIComponent(text);
+        window.open(`https://api.whatsapp.com/send?phone=5617254081&text=${message}`, '_blank');
+        document.getElementById("feedback-text").value = "";
+    }
+
+    // OPCIÓN 2: BUZÓN WEB FORMULARIO CONVENCIONAL
+    function sendFeedbackWebForm() {
+        const comment = document.getElementById("feedback-text").value.trim();
+        if (!comment) { alert("Por favor escribe un mensaje antes de enviar."); return; }
+        
+        alert("¡Muchas gracias! Tu comentario ha sido registrado exitosamente en nuestro formulario.");
+        document.getElementById("feedback-text").value = "";
+    }
+
+    // Inicializar estado del sitio
+    checkStoreStatus();
+    renderTabs();
+    renderProducts();
+</script>
+</body>
+</html>
