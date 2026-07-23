@@ -250,7 +250,7 @@
                         <i class="ph-bold ph-ticket"></i> Código Promocional
                     </label>
                     <div class="flex gap-2">
-                        <input type="text" id="promo-code-input" maxlength="5" placeholder="Ej. DELI5" oninput="this.value = this.value.toUpperCase()" class="flex-1 bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white uppercase tracking-widest font-mono focus:outline-none focus:border-amber-400">
+                        <input type="text" id="promo-code-input" maxlength="5" placeholder="Ej. D3LIB" oninput="this.value = this.value.toUpperCase()" class="flex-1 bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white uppercase tracking-widest font-mono focus:outline-none focus:border-amber-400">
                         <button onclick="applyPromoCode()" class="px-3 py-2 bg-amber-400 hover:bg-amber-500 text-neutral-950 font-extrabold text-xs rounded-lg uppercase tracking-wider transition-all">
                             Aplicar
                         </button>
@@ -319,8 +319,18 @@
                 <h4 class="font-black tracking-tight uppercase text-lg">DeliBurger</h4>
             </div>
             <div class="text-xs text-stone-300 leading-relaxed space-y-2">
-                <p><strong class="text-amber-400">Deli Popo (Calle 4):</strong><br>Calle 4, Esq. Priv. Popo, Col. Pantitlán.</p>
-                <p><strong class="text-amber-400">Deli Guadalupe:</strong><br>Calle 4 302 Bis Agrícola Pantitlán.</p>
+                <p>
+                    <strong class="text-amber-400">Deli Popo (Calle 4):</strong><br>
+                    <a href="https://maps.app.goo.gl/YbV1MCYLc6io5bE6A" target="_blank" class="hover:text-amber-400 underline decoration-amber-400/40 transition-colors">
+                        Calle 4, Esq. Priv. Popo, Col. Pantitlán.
+                    </a>
+                </p>
+                <p>
+                    <strong class="text-amber-400">Deli Guadalupe:</strong><br>
+                    <a href="https://maps.app.goo.gl/VpzriNj9ncj3kNn3A" target="_blank" class="hover:text-amber-400 underline decoration-amber-400/40 transition-colors">
+                        Calle 4 302 Bis Agrícola Pantitlán.
+                    </a>
+                </p>
             </div>
             <div class="text-xs text-stone-400 space-y-1">
                 <p><i class="ph-bold ph-clock mr-1 text-amber-400"></i> Miércoles a Lunes — 16:30 a 23:00 Hrs</p>
@@ -399,6 +409,7 @@
     const FEEDBACK_IMAGES = [
         { url: "https://lh3.googleusercontent.com/d/1X66vsRRd6lr-msdG2z0nrtNQtgSyDozl", caption: "💬 «¡Riquisimas hamburguesas!»" },
         { url: "https://lh3.googleusercontent.com/d/1GhA4nX42UtQa49prpRDQZVhrCdIWvjl9", caption: "💬 «Servicio al cliente excelente.»" },
+        { url: "https://lh3.googleusercontent.com/d/1hKYtX9bymlB_a-l00heWN4zR1f07ZKT_", caption: "💬 «Excelente Puntuacion en DIDI FOOD.»" },
     ];
 
     // CONFIGURACIÓN DE CÓDIGOS PROMOCIONALES (MÁXIMO 5 CARACTERES ALFANUMÉRICOS)
@@ -407,6 +418,8 @@
         "DELI5": { type: "percent", value: 5, desc: "5% de descuento" },
         "DEL10": { type: "percent", value: 10, desc: "10% de descuento" },
         "DES20": { type: "fixed", value: 20, desc: "$20.00 de descuento" }
+        "DES50": { type: "fixed", value: 50, desc: "$50.00 de descuento" }
+        "DEL00": { type: "fixed", value: 100, desc: "$100.00 de descuento" }
     };
 
     let activePromo = null;
