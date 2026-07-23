@@ -330,30 +330,33 @@
         </div>
 
         <!-- COLUMNA DERECHA: BUZÓN DE COMENTARIOS -->
-        <div class="md:col-span-4 space-y-4 bg-neutral-900/40 border border-neutral-900 p-5 rounded-2xl">
-            <div class="space-y-1">
-                <h5 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center justify-center md:justify-start gap-1.5">
-                    <i class="ph-bold ph-chat-teardrop-dots text-sm"></i> Buzón de Sugerencias
-                </h5>
-                <p class="text-[11px] text-stone-400 leading-tight">
-                    ¿Tienes dudas o comentarios? Envíanos tu mensaje:
-                </p>
-            </div>
+        <!-- BUZÓN DE COMENTARIOS / VALORACIÓN -->
+<div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-5 text-center space-y-4">
+    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-400/10 text-amber-400 text-2xl mb-1">
+        <i class="ph-bold ph-star shadow-sm"></i>
+    </div>
+    <h3 class="text-lg font-black uppercase text-amber-400 tracking-wide">¡Tu opinión nos importa mucho!</h3>
+    <p class="text-xs text-stone-300 max-w-sm mx-auto">
+        Ayúdanos a seguir mejorando o déjanos una reseña sobre tu experiencia en DeliBurger.
+    </p>
 
-            <div class="space-y-2">
-                <textarea id="feedback-text" rows="2" placeholder="Escribe aquí tu mensaje..." class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white placeholder-stone-600 focus:outline-none focus:border-amber-400 resize-none"></textarea>
-                
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="sendFeedbackToWhatsApp()" class="py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] rounded-lg uppercase tracking-wider flex items-center justify-center gap-1 transition-colors">
-                        <i class="ph-bold ph-whatsapp-logo text-sm"></i> WhatsApp
-                    </button>
-                    <button onclick="sendFeedbackWebForm()" class="py-2 bg-amber-400 hover:bg-amber-500 text-neutral-950 font-bold text-[11px] rounded-lg uppercase tracking-wider flex items-center justify-center gap-1 transition-colors">
-                        <i class="ph-bold ph-paper-plane-tilt text-sm"></i> Enviar Web
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+        <!-- Opciones a Google Maps (Reseña Pública) -->
+        <a href="https://maps.app.goo.gl/YbV1MCYLc6io5bE6A" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center gap-2 px-4 py-3 bg-neutral-950 border border-amber-400/30 hover:border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-neutral-950 font-bold text-xs rounded-xl transition-all shadow-md">
+            <i class="ph-bold ph-map-pin text-lg"></i>
+            Calificar en Google Maps
+        </a>
 
+        <!-- Opción a Google Forms (Retroalimentación Privada) -->
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiYX3VQ2NOewplteYiy3wu_ts31D1hFb26JYW4lgfndHX2YA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center gap-2 px-4 py-3 bg-neutral-950 border border-neutral-700 hover:border-stone-400 text-stone-200 hover:bg-stone-800 font-bold text-xs rounded-xl transition-all shadow-md">
+            <i class="ph-bold ph-note-pencil text-lg"></i>
+            Buzón (Google Forms)
+        </a>
+    </div>
+</div>
+        
     </div>
 
     <div class="max-w-6xl mx-auto px-4 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-[10px] text-stone-600 font-medium">
