@@ -87,7 +87,7 @@
 
         <div id="content-banner-promo" class="grid grid-cols-1 md:grid-cols-12 items-center">
             <div class="md:col-span-4 h-48 md:h-full min-h-[180px] bg-neutral-950 relative">
-                <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80" alt="Promo DeliBurger" class="w-full h-full object-cover" onerror="handleImgError(this)">
+                <img src="https://lh3.googleusercontent.com/d/18alTehKXG2lvr0WTqIV78Enhl5fMenPV" alt="Promo DeliBurger" class="w-full h-full object-cover" onerror="handleImgError(this)">
             </div>
             <div class="md:col-span-8 p-6 space-y-3">
                 <span class="bg-rose-600 text-white font-extrabold text-[10px] px-2 py-0.5 rounded uppercase tracking-wider">Promoción Apertura</span>
@@ -126,7 +126,7 @@
             Satisfaciendo <br><span class="text-amber-400 neon-text-yellow">Paladares</span>
         </h2>
         <p class="text-stone-300 text-xs sm:text-sm max-w-lg">
-            Sabor único, ingredientes de alta calidad y la mejor atención. Pide directamente en línea.
+            Sabor único, ingredientes de alta calidad y la mejor atención. Pide directamente desde aqui y envia tu pedido por WhatsApp.
         </p>
         <div class="flex flex-wrap gap-3 justify-center md:justify-start">
             <a href="#menu-container" class="px-6 py-3 bg-amber-400 text-neutral-950 hover:bg-amber-500 font-bold rounded-xl shadow-lg transition-all text-xs uppercase tracking-wider flex items-center gap-2">
@@ -349,7 +349,7 @@
                 <p class="text-[11px] text-stone-300 leading-relaxed">
                     ¡Aparecimos en los reportajes de Canal 6! Revisa la nota completa y la publicación especial en nuestra página oficial.
                 </p>
-                <a href="https://www.facebook.com/permalink.php?story_fbid=TU_ID_DE_PUBLICACION&id=TU_ID_PAGINA" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all uppercase shadow-md">
+                <a href="https://www.facebook.com/share/v/1J8Fgvd5qs/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all uppercase shadow-md">
                     <i class="ph-bold ph-facebook-logo text-base"></i> Ver Publicación en Facebook
                 </a>
             </div>
@@ -378,9 +378,8 @@
 
     // IMÁGENES GOOGLE DRIVE
     const FEEDBACK_IMAGES = [
-        { url: "https://lh3.googleusercontent.com/d/1Ejemplo_ID_Drive_1", caption: "💬 «¡Las mejores hamburguesas de la zona!»" },
-        { url: "https://lh3.googleusercontent.com/d/1Ejemplo_ID_Drive_2", caption: "📦 «Llegó súper rápido y bien caliente.»" },
-        { url: "https://lh3.googleusercontent.com/d/1Ejemplo_ID_Drive_3", caption: "🔥 «El combo pareja no falla jamás.»" }
+        { url: "https://lh3.googleusercontent.com/d/1X66vsRRd6lr-msdG2z0nrtNQtgSyDozl", caption: "💬 «¡Riquisimas hamburguesas!»" },
+        { url: "https://lh3.googleusercontent.com/d/1GhA4nX42UtQa49prpRDQZVhrCdIWvjl9", caption: "💬 «Servicio al cliente excelente.»" },
     ];
 
     let currentChatIndex = 0;
@@ -400,7 +399,7 @@
         { id: 5, name: "Con Salchicha", price: 70, category: "Hamburguesas", img: "https://images.unsplash.com/photo-1582196016295-f8c8bd4b3a99?auto=format&fit=crop&w=500&q=80", desc: "100gr carne de res, queso amarillo, quesillo y salchicha." },
         { id: 6, name: "Pollo", price: 80, category: "Hamburguesas", img: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=500&q=80", desc: "Pechuga de pollo empanizada frita y quesillo derretido." },
         { id: 7, name: "Doble", price: 85, category: "Hamburguesas", img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80", desc: "200gr carne de res, queso amarillo y quesillo." },
-        { id: 8, name: "Doble Especial", price: 90, category: "Hamburguesas", img: "https://images.unsplash.com/photo-1582196016295-f8c8bd4b3a99?auto=format&fit=crop&w=500&q=80", desc: "200gr carne de res, doble queso amarillo, tocino, piña o salchicha." },
+        { id: 8, name: "Doble Especial + Piña, Salchicha o Tocino", price: 90, category: "Hamburguesas", img: "https://images.unsplash.com/photo-1582196016295-f8c8bd4b3a99?auto=format&fit=crop&w=500&q=80", desc: "200gr carne de res, doble queso amarillo, tocino, piña o salchicha." },
         { id: 9, name: "Gourmet", price: 90, category: "Hamburguesas", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80", desc: "100gr carne de res, quesillo, queso amarillo, costra de queso oaxaca con tocino carnoso." },
         { id: 10, name: "Gourmet Manchego", price: 90, category: "Hamburguesas", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80", desc: "100gr carne de res, quesillo, queso amarillo, costra de queso manchego con trozos de salchicha." },
         { id: 11, name: "Chesseburger", price: 90, category: "Hamburguesas", img: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=500&q=80", desc: "100gr carne de res rellena de queso manchego, americano y quesillo." },
@@ -425,16 +424,16 @@
         { id: 26, name: "Salchipapas", price: 60, category: "Papas y Botanas", img: "https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=500&q=80", desc: "Combinación de papas a la francesa con trozos de salchicha frita." },
 
         // --- COMBOS ---
-        { id: 27, name: "Combo Consiéntete", price: 110, category: "Combos", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80", desc: "1 Hamburguesa Clásica + 1 Hot Dog + 1 Complemento de papas." },
-        { id: 28, name: "Combo Pareja", price: 215, category: "Combos", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80", desc: "2 Hamburguesas Clásicas + 1 Orden de Hot Dogs + 1 Orden de Papas." },
+        { id: 27, name: "Combo Consiéntete", price: 110, category: "Combos", img: "https://lh3.googleusercontent.com/d/1ZKXoPgNM36rxDkn-20uQP7kdE6nkJcnL", desc: "1 Hamburguesa Clásica + 1 Hot Dog + 1 Complemento de papas." },
+        { id: 28, name: "Combo Pareja", price: 215, category: "Combos", img: "https://lh3.googleusercontent.com/d/18alTehKXG2lvr0WTqIV78Enhl5fMenPV", desc: "2 Hamburguesas Clásicas + 1 Orden de Hot Dogs + 1 Orden de Papas." },
         { id: 29, name: "Combo Familiar", price: 390, category: "Combos", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80", desc: "4 Hamburguesas Clásicas + 1 Orden de Hot Dogs + 2 Ordenes de Papas a la Francesa." },
 
         // --- REFRESCOS Y BEBIDAS ---
-        { id: 30, name: "Agua Simple 600ml", price: 25, category: "Refrescos y Bebidas", img: "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=500&q=80", desc: "Botella de agua purificada 600ml." },
-        { id: 31, name: "Boing Mango", price: 25, category: "Refrescos y Bebidas", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80", desc: "Jugo/Jarra Boing sabor mango." },
-        { id: 32, name: "Boing Manzana", price: 25, category: "Refrescos y Bebidas", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80", desc: "Jugo/Jarra Boing sabor manzana." },
-        { id: 33, name: "Boing Guayaba", price: 25, category: "Refrescos y Bebidas", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80", desc: "Jugo/Jarra Boing sabor guayaba." },
-        { id: 34, name: "Coca Cola", price: 30, category: "Refrescos y Bebidas", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80", desc: "Refresco Coca-Cola helado." }
+        { id: 30, name: "Agua Simple 600ml", price: 25, category: "Refrescos y Bebidas", img: "https://lh3.googleusercontent.com/d/1EzoGL9-Dy6DQIXoW2FZZtn6UTiFUb6Fi", desc: "Botella de agua purificada 600ml." },
+        { id: 31, name: "Boing Mango", price: 25, category: "Refrescos y Bebidas", img: "https://lh3.googleusercontent.com/d/1uflHX4eqx8wCvPL-d2tQqSqlaUNC2NlL", desc: "Jugo Boing sabor mango." },
+        { id: 32, name: "Boing Manzana", price: 25, category: "Refrescos y Bebidas", img: "https://lh3.googleusercontent.com/d/eoKEvDKoNFOXyvlHbQYJSDudzxFLSrAo", desc: "Jugo Boing sabor manzana." },
+        { id: 33, name: "Boing Guayaba", price: 25, category: "Refrescos y Bebidas", img: "https://lh3.googleusercontent.com/d/1xzPXjM15mZrxyahd7J6NoOPZXfJfnwam", desc: "Jugo Boing sabor guayaba." },
+        { id: 34, name: "Coca Cola", price: 30, category: "Refrescos y Bebidas", img: "https://lh3.googleusercontent.com/d/1jx6Kp3QAt4gsMi4n-LeXWNB8UqjHZ5m8", desc: "Refresco Coca-Cola 600ml." }
     ];
 
     let cart = [];
